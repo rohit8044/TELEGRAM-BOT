@@ -6,9 +6,9 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
 # ---------- Config from Environment ----------
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-API_URL = os.getenv("API_URL")
-API_KEY = os.getenv("API_KEY")
+BOT_TOKEN = os.getenv("8366938124:AAGMffmDBP0mDCY9mMAiqPW2hO1BN8ay8cU")
+API_URL = os.getenv("https://hgcheats.online/api/reset.php")
+API_KEY = os.getenv("b12780ab9316ab28b7d6a72e65517e4935d3c5d557301654f562ea29c3eb34cd")
 ADMINS = {int(x) for x in os.getenv("ADMINS", "").split(",") if x}
 
 MAX_MEMBER_RESETS = 10
