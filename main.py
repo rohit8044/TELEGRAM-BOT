@@ -87,17 +87,14 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Catch plain text messages (treat them as keys)."""
     user_id = update.effective_user.id
     username = update.message.text.strip()
 
-    # Ignore invalid messages
     if " " in username or len(username) < 3:
         return
 
     is_admin = user_id in ADMINS
 
-    # Member reset limit check
     if not is_admin:
         used = member_reset_count.get(user_id, 0)
         if used >= MAX_MEMBER_RESETS:
@@ -105,7 +102,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         member_reset_count[user_id] = used + 1
 
-    # Call API
     data = call_reset_api(username)
     message = data.get("message", "No response from API")
 
@@ -116,24 +112,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ---------- Main ----------
 def main():
-    # Debugging environment values
-    logger.info("DEBUG: BOT_TOKEN present? %s", bool(BOT_TOKEN))
-    logger.info("DEBUG: API_URL = %s", API_URL)
-    logger.info("DEBUG: API_KEY present? %s", bool(API_KEY))
-    logger.info("DEBUG: ADMINS = %s", ADMINS)
-
     if not BOT_TOKEN:
         raise ValueError("BOT_TOKEN is not set in environment variables!")
 
     app = ApplicationBuilder().token(BOT_TOKEN).build()
-
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("status", status))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
     app.run_polling()
 
 if __name__ == "__main__":
     main()
-  
